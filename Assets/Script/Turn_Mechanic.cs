@@ -25,9 +25,11 @@ public class Turn_Mechanic : MonoBehaviour
     }
     public void find_Near_Hex(Vector2 touch_pos, GameObject hex)
     {
-        foreach (GameObject e in turn_Group_Array) { e.GetComponent<Hex>().child.SetActive(false); }
+        try
+        {
+            foreach (GameObject e in turn_Group_Array) { e.GetComponent<Hex>().child.SetActive(false); }
         turn_Group_Array.Clear();
-        try { distance = new Vector2(hex.GetComponent<Hex>().NeighborList[0].transform.position.x, hex.GetComponent<Hex>().NeighborList[0].transform.position.y); }
+         distance = new Vector2(hex.GetComponent<Hex>().NeighborList[0].transform.position.x, hex.GetComponent<Hex>().NeighborList[0].transform.position.y);}
         catch (NullReferenceException) {}
         distance2 = Vector2.Distance( distance, touch_pos);
         turn_Group_Array.Add(hex.GetComponent<Hex>().NeighborList[0]);
