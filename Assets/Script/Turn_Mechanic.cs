@@ -62,7 +62,6 @@ public class Turn_Mechanic : MonoBehaviour
             if (turn_Group_Array[0].GetComponent<Hex>().NeighborList.Contains(e)) { turn_Group_Array.Add(e);  break; };
         }
         foreach(GameObject e in turn_Group_Array) { e.GetComponent<Hex>().child.SetActive(true); }
-        StartCoroutine(turn_Clockwise());//bittiğinde sil
     }
 
     public IEnumerator  turn_Clockwise()

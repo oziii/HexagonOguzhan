@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Input_Mouse_Touch : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
+public class Input_Mouse_Touch : MonoBehaviour
 
 {
     public GameObject gm;
-    private Vector2 downHand;
-    private Vector2 upHand;
+    private Vector2 touch_pos;
+    private Vector2 endTouch_pos;
     private void Awake()
     {
         gm = GameObject.FindGameObjectWithTag("gamemanager");
@@ -17,44 +17,17 @@ public class Input_Mouse_Touch : MonoBehaviour, IPointerDownHandler, IPointerUpH
     {
         if (Input.GetMouseButtonDown(0))
         {
-            Vector2 touch_pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            touch_pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             // mouse position
             gm.GetComponent<Turn_Mechanic>().find_Near_Hex(touch_pos, gameObject);
-            gm.GetComponent<Turn_Mechanic>().turn_Clockwise();
-
         }
-    }
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        downHand = eventData.position;
-    }
-
-    public void OnDrag(PointerEventData eventData)
-    {
-        upHand = eventData.position;
-    }
-
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        upHand = eventData.position;
-
-            if (downHand == upHand)
-            {
-                    Vector2 touch_pos = Camera.main.ScreenToWorldPoint(upHand);
-
-                    RaycastHit2D hit = Physics2D.Raycast(touch_pos, Vector2.zero);
-                    if (hit.collider != null)
-                         gm.GetComponent<Turn_Mechanic>().find_Near_Hex(touch_pos, hit.collider.gameObject);
-                        
-            }
-            else
-            {
-                if (upHand.x > downHand.x || upHand.y > downHand.y)
-                    StartCoroutine(gm.GetComponent<Turn_Mechanic>().turn_Clockwise());
-                else
-                    StartCoroutine(gm.GetComponent<Turn_Mechanic>().turn_Unclockwise());
-            }
-        
+        if (Input.GetMouseButtonUp(0))
+        {
+            endTouch_pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            if (endTouch_pos.x > gameObject.transform.position.x || endTouch_pos.y > gameObject.transform.position.y) { StartCoroutine(gm.GetComponent<Turn_Mechanic>().turn_Clockwise()); }    
+            else { StartCoroutine(gm.GetComponent<Turn_Mechanic>().turn_Unclockwise()); }
+               
+        }
     }
 }
 
